@@ -9,7 +9,12 @@ public class GameManager : MonoBehaviour
     public GameObject ball;
     public GameObject ARCamera;
     public Text scoreText;
+    public float liveTime = 10.0f;
     int score;
+    float current_time;
+    bool isVisible = false;
+    bool isThrown = false;
+    Vector3 startPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +22,8 @@ public class GameManager : MonoBehaviour
         //bool focusModeSet = CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
         //if (!focusModeSet)
         //    Debug.Log("Failed to set focus mode");
+
+        startPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -30,17 +37,24 @@ public class GameManager : MonoBehaviour
             
             if (touch.phase == TouchPhase.Began)
             {
-                Ray ray = Camera.main.ScreenPointToRay(touchPosition);
-                RaycastHit hitObject;
-
-                //if(Physics.Raycast(ray, out hitObject))
-                //{
-                //    if(hitObject.)
-                //}
-
-                GameObject currentBall = Instantiate(ball, ARCamera.transform);
-                currentBall.GetComponent<Rigidbody>().AddForce(ARCamera.transform.forward * 20);
+                if (!isVisible && !isThrown)
+                {
+                    ball.SetActive(true);
+                    isVisible = true;
+                }
+                else if (isVisible && !isThrown)
+                {
+                    ball.GetComponent<Rigidbody>().AddForce(ARCamera.transform.forward * 20);
+                    current_time = Time.time;
+                }
             }
+        }
+
+        if(isThrown && Time.time - current_time >= liveTime)
+        {
+            transform.SetPositionAndRotation(startPosition, transform.rotation);
+            isVisible = false;
+            isThrown = false;
         }
     }
 
@@ -49,4 +63,6 @@ public class GameManager : MonoBehaviour
         score += points;
         scoreText.text = "Score: " + score;
     }
+
+
 }
