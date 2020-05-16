@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CupScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    private void OnTriggerEnter(Collider coll)
     {
-        
+        if(coll.gameObject.tag == "Ball")
+        {
+            GameManager.instance.HitPoint(50);
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

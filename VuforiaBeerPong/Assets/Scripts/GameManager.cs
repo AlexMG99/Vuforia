@@ -6,24 +6,31 @@ using Vuforia;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance { get; private set; }
+
     public GameObject ball;
+    BallScript ballScript;
     public GameObject ARCamera;
     public Text scoreText;
-    public float liveTime = 10.0f;
+    public Slider sliderScore;
     int score;
-    float current_time;
-    bool isVisible = false;
-    bool isThrown = false;
-    Vector3 startPosition;
+
+    AudioSource audioSource;
+    public AudioClip clappingSound;
+
+    private void Awake()
+    {
+        if (instance == null) { instance = this; }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        ballScript = ball.GetComponent<BallScript>();
         //bool focusModeSet = CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
         //if (!focusModeSet)
         //    Debug.Log("Failed to set focus mode");
-
-        startPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -37,32 +44,19 @@ public class GameManager : MonoBehaviour
             
             if (touch.phase == TouchPhase.Began)
             {
-                if (!isVisible && !isThrown)
-                {
-                    ball.SetActive(true);
-                    isVisible = true;
-                }
-                else if (isVisible && !isThrown)
-                {
-                    ball.GetComponent<Rigidbody>().AddForce(ARCamera.transform.forward * 20);
-                    current_time = Time.time;
-                }
+                ballScript.ThrowBall();
             }
-        }
-
-        if(isThrown && Time.time - current_time >= liveTime)
-        {
-            transform.SetPositionAndRotation(startPosition, transform.rotation);
-            isVisible = false;
-            isThrown = false;
         }
     }
 
-    public void IncreaseScore(string text, int points)
+    public void HitPoint(int points)
     {
         score += points;
         scoreText.text = "Score: " + score;
+        sliderScore.value++;
+        audioSource.PlayOneShot(clappingSound);
     }
+
 
 
 }
