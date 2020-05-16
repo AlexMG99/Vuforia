@@ -47,6 +47,7 @@ public class BallScript : MonoBehaviour
             rb.AddForce(GameManager.instance.ARCamera.transform.forward * force, ForceMode.Impulse);
             current_time = Time.time;
             transform.parent = null;
+            isThrown = true;
         }
     }
 }
