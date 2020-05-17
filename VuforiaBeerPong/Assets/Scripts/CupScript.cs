@@ -9,10 +9,38 @@ public class CupScript : MonoBehaviour
     {
         if(coll.gameObject.tag == "Ball")
         {
-            GameManager.instance.HitPoint(50);
+            GameManager.instance.HitPoint(CalculateScore());
             Destroy(gameObject.transform.parent.gameObject);
         }
     }
 
+    private int CalculateScore()
+    {
+        float distance = GameManager.instance.CalculateDistance();
+        int point = 0;
+
+        if (distance > 0.3 && distance <= 0.45)
+        {
+            point = 15;
+            GameManager.instance.redCupText.text = "TOO EASY";
+        }
+        else if (distance > 0.45 && distance <= 0.75)
+        {
+            point = 50;
+            GameManager.instance.redCupText.text = "NICE";
+        }
+        else if (distance > 0.75 && distance <= 1.25)
+        {
+            point = 100;
+            GameManager.instance.redCupText.text = "AMAZING";
+        }
+        else if (distance > 1.25)
+        {
+            point = 250;
+            GameManager.instance.redCupText.text = "DRINKTASTIC";
+        }
+
+        return point;
+    }
 
 }

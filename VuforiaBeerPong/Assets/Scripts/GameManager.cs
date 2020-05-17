@@ -6,7 +6,21 @@ using Vuforia;
 
 public class GameManager : MonoBehaviour
 {
+    public enum Distance
+    {
+        TOO_CLOSE,
+        CLOSE,
+        MIDDLE,
+        FAR,
+        VERY_FAR
+    };
+
     public static GameManager instance { get; private set; }
+
+    [HideInInspector]
+    public bool isTableSeen = false;
+    [HideInInspector]
+    public GameObject cupPosition;
 
     public GameObject ball;
     BallScript ballScript;
@@ -14,7 +28,10 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public Slider sliderScore;
     public GameObject redCup;
+    public Text redCupText;
+    public Text distanceText;
     int score;
+    Distance distanceState;
 
     AudioSource audioSource;
     public AudioClip clappingSound;
@@ -29,9 +46,6 @@ public class GameManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         ballScript = ball.GetComponent<BallScript>();
-        //bool focusModeSet = CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
-        //if (!focusModeSet)
-        //    Debug.Log("Failed to set focus mode");
     }
 
     // Update is called once per frame
@@ -43,7 +57,7 @@ public class GameManager : MonoBehaviour
 
             Vector3 touchPosition = touch.position;
 
-            if (touch.phase == TouchPhase.Began && !redCup.active)
+            if (touch.phase == TouchPhase.Began && !redCup.active && isTableSeen && CalculateDistance() > 0.3)
             {
                 ballScript.ThrowBall();
             }
@@ -51,6 +65,9 @@ public class GameManager : MonoBehaviour
 
         if (redCup.active && !audioSource.isPlaying)
             redCup.SetActive(false);
+
+        if(isTableSeen)
+            StateManager();
     }
 
     public void HitPoint(int points)
@@ -62,6 +79,49 @@ public class GameManager : MonoBehaviour
         redCup.SetActive(true);
     }
 
+    public float CalculateDistance()
+    {
+        Vector3 distance = cupPosition.transform.position - ARCamera.transform.position;
+        return distance.sqrMagnitude;
+    }
 
 
+    void StateManager()
+    {
+        float distance = GameManager.instance.CalculateDistance();
+
+        if (distance < 0.3)
+            distanceState = Distance.TOO_CLOSE;
+        else if (distance > 0.3 && distance <= 0.45)
+            distanceState = Distance.CLOSE;
+        else if (distance > 0.45 && distance <= 0.75)
+            distanceState = Distance.MIDDLE;
+        else if (distance > 0.75 && distance <= 1.25)
+            distanceState = Distance.FAR;
+        else if (distance > 1.25)
+            distanceState = Distance.VERY_FAR;
+
+        switch (distanceState)
+        {
+            case Distance.TOO_CLOSE:
+                distanceText.text = "TOO CLOSE!";
+                distanceText.color = Color.red;
+                break;
+            case Distance.CLOSE:
+                distanceText.text = "Close";
+                distanceText.color = Color.yellow;
+                break;
+            case Distance.MIDDLE:
+                distanceText.text = "";
+                break;
+            case Distance.FAR:
+                distanceText.text = "Far";
+                distanceText.color = Color.blue;
+                break;
+            case Distance.VERY_FAR:
+                distanceText.text = "Very far";
+                distanceText.color = Color.magenta;
+                break;
+        }
+    }
 }
