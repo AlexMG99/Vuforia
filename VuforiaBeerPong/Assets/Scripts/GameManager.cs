@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject ARCamera;
     public Text scoreText;
     public Slider sliderScore;
+    public GameObject redCup;
     int score;
 
     AudioSource audioSource;
@@ -41,12 +42,15 @@ public class GameManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
 
             Vector3 touchPosition = touch.position;
-            
-            if (touch.phase == TouchPhase.Began)
+
+            if (touch.phase == TouchPhase.Began && !redCup.active)
             {
                 ballScript.ThrowBall();
             }
         }
+
+        if (redCup.active && !audioSource.isPlaying)
+            redCup.SetActive(false);
     }
 
     public void HitPoint(int points)
@@ -55,6 +59,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + score;
         sliderScore.value++;
         audioSource.PlayOneShot(clappingSound);
+        redCup.SetActive(true);
     }
 
 

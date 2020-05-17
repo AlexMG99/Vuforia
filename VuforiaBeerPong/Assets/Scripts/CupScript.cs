@@ -10,7 +10,7 @@ public class CupScript : MonoBehaviour
         if(coll.gameObject.tag == "Ball")
         {
             GameManager.instance.HitPoint(50);
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
 
