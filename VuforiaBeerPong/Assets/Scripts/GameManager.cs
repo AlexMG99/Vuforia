@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Vuforia;
 
 public class GameManager : MonoBehaviour
@@ -20,21 +21,30 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool isTableSeen = false;
     [HideInInspector]
+    public bool isMarkerSeen = false;
+    bool hasWin = false;
+    [HideInInspector]
     public GameObject cupPosition;
+    [HideInInspector]
+    public EmojiScript emojiFace;
 
     public GameObject ball;
     BallScript ballScript;
+
     public GameObject ARCamera;
     public Text scoreText;
     public Slider sliderScore;
     public GameObject redCup;
     public Text redCupText;
-    public Text distanceText;
+    public TextMesh distanceText;
+    public GameObject winObject;
+
     int score;
     Distance distanceState;
 
     AudioSource audioSource;
     public AudioClip clappingSound;
+    public AudioClip winSound;
 
     private void Awake()
     {
@@ -57,14 +67,24 @@ public class GameManager : MonoBehaviour
 
             Vector3 touchPosition = touch.position;
 
-            if (touch.phase == TouchPhase.Began && !redCup.active && isTableSeen && CalculateDistance() > 0.3)
+            if (touch.phase == TouchPhase.Began && !redCup.active && isTableSeen && isMarkerSeen && CalculateDistance() > 0.3)
             {
                 ballScript.ThrowBall();
+            }
+            if(hasWin)
+            {
+                SceneManager.LoadScene("MainMenuScene");
             }
         }
 
         if (redCup.active && !audioSource.isPlaying)
+        {
             redCup.SetActive(false);
+            if(sliderScore.value == sliderScore.maxValue)
+            {
+                WinGame();
+            }
+        }
 
         if(isTableSeen)
             StateManager();
@@ -77,6 +97,7 @@ public class GameManager : MonoBehaviour
         sliderScore.value++;
         audioSource.PlayOneShot(clappingSound);
         redCup.SetActive(true);
+        emojiFace.ChangeEmojiFace((int)sliderScore.value);
     }
 
     public float CalculateDistance()
@@ -104,7 +125,7 @@ public class GameManager : MonoBehaviour
         switch (distanceState)
         {
             case Distance.TOO_CLOSE:
-                distanceText.text = "TOO CLOSE!";
+                distanceText.text = "TOO CLOSE";
                 distanceText.color = Color.red;
                 break;
             case Distance.CLOSE:
@@ -112,7 +133,8 @@ public class GameManager : MonoBehaviour
                 distanceText.color = Color.yellow;
                 break;
             case Distance.MIDDLE:
-                distanceText.text = "";
+                distanceText.text = "Good";
+                distanceText.color = Color.green;
                 break;
             case Distance.FAR:
                 distanceText.text = "Far";
@@ -123,5 +145,12 @@ public class GameManager : MonoBehaviour
                 distanceText.color = Color.magenta;
                 break;
         }
+    }
+
+    void WinGame()
+    {
+        winObject.SetActive(true);
+        audioSource.PlayOneShot(winSound);
+        hasWin = true;
     }
 }

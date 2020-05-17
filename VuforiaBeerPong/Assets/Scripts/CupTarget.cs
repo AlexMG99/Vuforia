@@ -10,12 +10,6 @@ public class CupTarget : MonoBehaviour
         GameManager.instance.cupPosition = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ActivateTable()
     {
         GameManager.instance.isTableSeen = true;
