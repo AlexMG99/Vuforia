@@ -6,11 +6,19 @@ public class EmojiScript : MonoBehaviour
 {
     public List<Sprite> spriteEmoji;
     SpriteRenderer spriteRenderer;
+    [HideInInspector]
+    public GameObject cup;
+    Animator cupAnimator;
+    float currentTime;
+
+    bool isDrinking = false;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        cup = transform.GetChild(1).gameObject;
+        cupAnimator = cup.GetComponent<Animator>();
         GameManager.instance.emojiFace = gameObject.GetComponent<EmojiScript>();
     }
 
@@ -18,6 +26,14 @@ public class EmojiScript : MonoBehaviour
     void Update()
     {
         transform.LookAt(GameManager.instance.ARCamera.transform);
+
+        if(isDrinking && Time.time - currentTime > 2)
+        {
+            int value = (int)GameManager.instance.sliderScore.value++;
+            ChangeEmojiFace(value);
+            cup.SetActive(false);
+            isDrinking = false;
+        }
     }
 
     public void ChangeEmojiFace(int beer)
@@ -38,5 +54,14 @@ public class EmojiScript : MonoBehaviour
         {
             spriteRenderer.sprite = spriteEmoji[3];
         }
+    }
+
+    public void DrinkBeer()
+    {
+        cup.SetActive(true);
+        cupAnimator.Play("Drink");
+        cup.GetComponent<AudioSource>().Play();
+        isDrinking = true;
+        currentTime = Time.time;
     }
 }

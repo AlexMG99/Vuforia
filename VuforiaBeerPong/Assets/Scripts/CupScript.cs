@@ -9,6 +9,7 @@ public class CupScript : MonoBehaviour
     {
         if(coll.gameObject.tag == "Ball")
         {
+            GetComponent<AudioSource>().Play();
             GameManager.instance.HitPoint(CalculateScore());
             Destroy(gameObject.transform.parent.gameObject);
         }

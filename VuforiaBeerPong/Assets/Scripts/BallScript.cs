@@ -5,6 +5,7 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
     Rigidbody rb;
+    AudioSource audioSource;
     float force = 1.0f;
 
     float current_time;
@@ -17,6 +18,7 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
 
         startPosition = transform.localPosition;
     }
@@ -49,5 +51,10 @@ public class BallScript : MonoBehaviour
             transform.parent = null;
             isThrown = true;
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        audioSource.Play();
     }
 }

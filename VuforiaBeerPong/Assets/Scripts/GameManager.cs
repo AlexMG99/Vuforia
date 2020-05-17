@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviour
         if (redCup.active && !audioSource.isPlaying)
         {
             redCup.SetActive(false);
-            if(sliderScore.value == sliderScore.maxValue)
+            emojiFace.DrinkBeer();
+            if (sliderScore.value == sliderScore.maxValue - 1)
             {
                 WinGame();
             }
@@ -94,10 +95,8 @@ public class GameManager : MonoBehaviour
     {
         score += points;
         scoreText.text = "Score: " + score;
-        sliderScore.value++;
         audioSource.PlayOneShot(clappingSound);
         redCup.SetActive(true);
-        emojiFace.ChangeEmojiFace((int)sliderScore.value);
     }
 
     public float CalculateDistance()
@@ -152,5 +151,6 @@ public class GameManager : MonoBehaviour
         winObject.SetActive(true);
         audioSource.PlayOneShot(winSound);
         hasWin = true;
+        ball.SetActive(false);
     }
 }
