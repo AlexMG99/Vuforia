@@ -22,7 +22,7 @@ public class CupScript : MonoBehaviour
 
         if (distance > 0.3 && distance <= 0.45)
         {
-            point = 15;
+            point = 25;
             GameManager.instance.redCupText.text = "TOO EASY";
         }
         else if (distance > 0.45 && distance <= 0.75)

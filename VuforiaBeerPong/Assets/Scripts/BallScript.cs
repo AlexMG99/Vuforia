@@ -9,8 +9,10 @@ public class BallScript : MonoBehaviour
     float force = 1.0f;
 
     float current_time;
-    bool isVisible = false;
-    bool isThrown = false;
+    [HideInInspector]
+    public bool isVisible = false;
+    [HideInInspector]
+    public bool isThrown = false;
     public float liveTime = 2.0f;
 
     Vector3 startPosition;

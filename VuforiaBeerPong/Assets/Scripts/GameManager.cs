@@ -126,6 +126,12 @@ public class GameManager : MonoBehaviour
             case Distance.TOO_CLOSE:
                 distanceText.text = "TOO CLOSE";
                 distanceText.color = Color.red;
+                if(!ballScript.isThrown)
+                {
+                    ball.SetActive(false);
+                    ballScript.isVisible = false;
+                    ballScript.isThrown = false;
+                }
                 break;
             case Distance.CLOSE:
                 distanceText.text = "Close";
