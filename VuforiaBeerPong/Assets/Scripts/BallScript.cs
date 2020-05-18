@@ -48,7 +48,22 @@ public class BallScript : MonoBehaviour
         }
         else if (isVisible && !isThrown)
         {
-            rb.AddForce(GameManager.instance.ARCamera.transform.forward * force, ForceMode.Impulse);
+            Vector3 resultVector = GameManager.instance.ARCamera.transform.forward;
+            float range = 0;
+            switch (GameManager.instance.drunkState)
+            {
+                case GameManager.Drunk.QUITE_DRUNK:
+                    range = Random.Range(-0.02f, 0.02f);
+                    break;
+                case GameManager.Drunk.DRUNK:
+                    range = Random.Range(-0.05f, 0.05f);
+                    break;
+                case GameManager.Drunk.VERY_DRUNK:
+                    range = Random.Range(-0.1f, 0.1f);
+                    break;
+            }
+            resultVector += new Vector3(range, range, range);
+            rb.AddForce(resultVector * force, ForceMode.Impulse);
             current_time = Time.time;
             transform.parent = null;
             isThrown = true;

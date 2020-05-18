@@ -38,21 +38,25 @@ public class EmojiScript : MonoBehaviour
 
     public void ChangeEmojiFace(int beer)
     {
-        if(beer < 2)
+        if(beer < 1)
         {
             spriteRenderer.sprite = spriteEmoji[0];
+            GameManager.instance.SetDrunkState(0);
         }
-        else if(beer >= 2 && beer < 5)
+        else if(beer >= 1 && beer < 4)
         {
             spriteRenderer.sprite = spriteEmoji[1];
+            GameManager.instance.SetDrunkState(1);
         }
-        else if(beer >= 5 && beer < 8)
+        else if(beer >= 4 && beer < 7)
         {
             spriteRenderer.sprite = spriteEmoji[2];
+            GameManager.instance.SetDrunkState(2);
         }
-        else if (beer >= 8)
+        else if (beer >= 7)
         {
             spriteRenderer.sprite = spriteEmoji[3];
+            GameManager.instance.SetDrunkState(3);
         }
     }
 

@@ -10,6 +10,7 @@ public class CupTarget : MonoBehaviour
         GameManager.instance.cupPosition = gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject;
     }
 
+
     public void ActivateTable()
     {
         GameManager.instance.isTableSeen = true;

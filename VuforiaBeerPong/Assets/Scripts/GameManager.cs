@@ -16,6 +16,14 @@ public class GameManager : MonoBehaviour
         VERY_FAR
     };
 
+    public enum Drunk
+    {
+        NOT_DRUNK = 0,
+        QUITE_DRUNK,
+        DRUNK,
+        VERY_DRUNK
+    }
+
     public static GameManager instance { get; private set; }
 
     [HideInInspector]
@@ -41,6 +49,8 @@ public class GameManager : MonoBehaviour
 
     int score;
     Distance distanceState;
+    [HideInInspector]
+    public Drunk drunkState = Drunk.NOT_DRUNK;
 
     AudioSource audioSource;
     public AudioClip clappingSound;
@@ -89,6 +99,11 @@ public class GameManager : MonoBehaviour
 
         if(isTableSeen)
             StateManager();
+    }
+
+    public void SetDrunkState(int state)
+    {
+        drunkState = (Drunk)state;
     }
 
     public void HitPoint(int points)

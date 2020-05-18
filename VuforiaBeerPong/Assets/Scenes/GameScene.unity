@@ -752,6 +752,7 @@ MonoBehaviour:
   redCupText: {fileID: 246134840}
   distanceText: {fileID: 688714439}
   winObject: {fileID: 815230685}
+  drunkState: 0
   clappingSound: {fileID: 8300000, guid: f2dc80dd476a3254c877eae851e8a32b, type: 3}
   winSound: {fileID: 8300000, guid: 33e4d5943d7d915439fcea4741712e0a, type: 3}
 --- !u!4 &295324933
@@ -3077,7 +3078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1476977252
 RectTransform:
   m_ObjectHideFlags: 0
