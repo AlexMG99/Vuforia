@@ -56,10 +56,10 @@ public class BallScript : MonoBehaviour
                     range = Random.Range(-0.02f, 0.02f);
                     break;
                 case GameManager.Drunk.DRUNK:
-                    range = Random.Range(-0.05f, 0.05f);
+                    range = Random.Range(-0.04f, 0.04f);
                     break;
                 case GameManager.Drunk.VERY_DRUNK:
-                    range = Random.Range(-0.1f, 0.1f);
+                    range = Random.Range(-0.07f, 0.07f);
                     break;
             }
             resultVector += new Vector3(range, range, range);
